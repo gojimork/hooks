@@ -17,16 +17,22 @@ export default function App() {
     return <button onClick={() => setView(true)}>show</button>;
   }
 }
-const PlanetInfo = ({ id }) => {
+
+const usePlanetInfo = (id) => {
   const [planetName, setPlanetName] = useState("");
   useEffect(() => {
     let canceled = false;
-    const url = `https://swapi.dev/api/planets/${id}`;
-    fetch(url)
+    fetch(`https://swapi.dev/api/planets/${id}`)
       .then((response) => response.json())
       .then((body) => !canceled && setPlanetName(body.name));
     return () => (canceled = true);
   }, [id]);
+
+  return planetName;
+};
+
+const PlanetInfo = ({ id }) => {
+  const planetName = usePlanetInfo(id);
   return (
     <div>
       {id} - {planetName}
